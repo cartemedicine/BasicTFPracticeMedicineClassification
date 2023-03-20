@@ -95,14 +95,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Bitmap image = null;
-        if(resultCode == 3)
+        if(requestCode == 1)
         {
-            image = (Bitmap) data.getExtras().get("data");
-            int dimension = Math.min(image.getWidth(), image.getHeight());
-            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+            Uri dat = data.getData();
+            try {
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             imageView.setImageBitmap(image);
-
-
 
         }
         else if (requestCode == IMAGE_CAPTURE_CODE && resultCode == RESULT_OK){
